@@ -1,5 +1,4 @@
 import argparse
-import dotenv
 import os
 import requests
 import telegram
@@ -9,15 +8,17 @@ from dotenv import load_dotenv
 CHAT_ID = 874442731
 
 
-
 if __name__ == '__main__':
+
     load_dotenv()
+
     TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
     DEVMAN_API_TOKEN = os.environ['DEVMAN_API_TOKEN']
 
     parser = argparse.ArgumentParser()
     parser.add_argument('chat_id',
-                        help='id чата в Телеграмме, куда будут отправляться сообщения о проверке')
+                        help='id чата в Телеграмме, '
+                             'куда будут отправляться сообщения о проверке')
     args = parser.parse_args()
     chat_id = args.chat_id
 
@@ -26,7 +27,8 @@ if __name__ == '__main__':
     url = 'https://dvmn.org/api/long_polling/'
 
     headers = {'Authorization': DEVMAN_API_TOKEN
-              }
+               }
+
     timestamp = 0
 
     while True:
@@ -43,24 +45,29 @@ if __name__ == '__main__':
                 timestamp = response.json()['new_attempts'][0]['timestamp']
 
             if response.json()['status'] == 'found':
-                lesson_title = response.json()['new_attempts'][0]['lesson_title']
-                lesson_returned = response.json()['new_attempts'][0]['is_negative']
-                lesson_url = response.json()['new_attempts'][0]['lesson_url']
+                lesson_title = \
+                    response.json()['new_attempts'][0]['lesson_title']
+                lesson_returned = \
+                    response.json()['new_attempts'][0]['is_negative']
+                lesson_url = \
+                    response.json()['new_attempts'][0]['lesson_url']
+
                 if lesson_returned:
                     result_text = 'К сожалению, в работе нашлись ошибки.'
                 else:
-                    result_text = 'Преподавателю всё понравилось. Можно приступать к следующему уроку.'
+                    result_text = \
+                        'Преподавателю всё понравилось. ' \
+                        'Можно приступать к следующему уроку.'
 
-                text = f'Преподаватель проверил Вашу работу "{lesson_title}" \n {lesson_url} \n {result_text}'
+                text = f'Преподаватель проверил Вашу работу ' \
+                       f'"{lesson_title}" ' \
+                       f'\n {lesson_url} \n {result_text}'
+
                 timestamp = response.json()['last_attempt_timestamp']
 
-            bot.send_message(text= text, chat_id=CHAT_ID)
+            bot.send_message(text=text, chat_id=CHAT_ID)
 
         except requests.exceptions.ReadTimeout:
             print('Сервер не отвечает')
         except requests.exceptions.ConnectionError:
             print('Ошибка соединения')
-
-
-
-
