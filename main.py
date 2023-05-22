@@ -39,7 +39,6 @@ if __name__ == '__main__':
                                     timeout=120)
             response.raise_for_status()
             timestamp = response.json()['last_attempt_timestamp']
-            print(response.json())
 
             if response.json()['status'] == 'found':
                 new_attempt = response.json()['new_attempts'][0]
