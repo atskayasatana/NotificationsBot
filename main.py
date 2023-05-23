@@ -41,11 +41,9 @@ if __name__ == '__main__':
 
             review_results = response.json()
 
-            if response.json()['status'] == 'found':
-                timestamp = review_results['last_attempt_timestamp']
+            if review_results['status'] == 'found':
 
                 new_attempt = review_results['new_attempts'][0]
-
                 lesson_title = new_attempt['lesson_title']
                 lesson_returned = new_attempt['is_negative']
                 lesson_url = new_attempt['lesson_url']
@@ -61,8 +59,12 @@ if __name__ == '__main__':
                        f'"{lesson_title}" ' \
                        f'\n {lesson_url} \n {result_text}'
 
-                timestamp = response.json()['last_attempt_timestamp']
+                timestamp = review_results['last_attempt_timestamp']
                 bot.send_message(text=text, chat_id=chat_id)
+
+            else:
+                if review_results['request_query']:
+                    timestamp = review_results['request_query'][0][1]
 
         except requests.exceptions.ReadTimeout:
             pass
