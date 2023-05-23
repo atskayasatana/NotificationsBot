@@ -38,10 +38,13 @@ if __name__ == '__main__':
                                     params=payload,
                                     timeout=120)
             response.raise_for_status()
-            timestamp = response.json()['last_attempt_timestamp']
+
+            review_results = response.json()
 
             if response.json()['status'] == 'found':
-                new_attempt = response.json()['new_attempts'][0]
+                timestamp = review_results['last_attempt_timestamp']
+
+                new_attempt = review_results['new_attempts'][0]
 
                 lesson_title = new_attempt['lesson_title']
                 lesson_returned = new_attempt['is_negative']
@@ -59,11 +62,10 @@ if __name__ == '__main__':
                        f'\n {lesson_url} \n {result_text}'
 
                 timestamp = response.json()['last_attempt_timestamp']
-
-            bot.send_message(text=text, chat_id=chat_id)
+                bot.send_message(text=text, chat_id=chat_id)
 
         except requests.exceptions.ReadTimeout:
-            print('Сервер не отвечает')
+            pass
         except requests.exceptions.ConnectionError:
             print('Ошибка соединения')
             time.sleep(60)
