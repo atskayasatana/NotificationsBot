@@ -75,11 +75,12 @@ if __name__ == '__main__':
                 if review_results['request_query']:
                     timestamp = review_results['request_query'][0][1]
 
+
     except requests.exceptions.ReadTimeout:
         pass
     except requests.exceptions.ConnectionError:
         logger.error('Не удается подключиться к серверу')
-        time.sleep(60)
+        time.sleep(15)
     except Unauthorized:
         logger.error('Неправильное значение токена')
     except BadRequest:
