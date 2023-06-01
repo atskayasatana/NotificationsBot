@@ -1,10 +1,21 @@
 import argparse
+import logging
 import os
 import requests
 import telegram
 import time
 
 from dotenv import load_dotenv
+from logger import TelegramLogsHandler
+from telegram.error import BadRequest, Unauthorized, InvalidToken, NetworkError
+
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.DEBUG,
+    filename='bot.log',
+    filemode='w'
+)
 
 
 if __name__ == '__main__':
@@ -21,17 +32,20 @@ if __name__ == '__main__':
     args = parser.parse_args()
     chat_id = args.chat_id
 
-    bot = telegram.Bot(token=telegram_bot_token)
+    try:
+        bot = telegram.Bot(token=telegram_bot_token)
+        url = 'https://dvmn.org/api/long_polling/'
+        headers = {'Authorization': devman_api_token
+                  }
+        timestamp = ''
+        logger = logging.getLogger('dvmn_bot_logger')
 
-    url = 'https://dvmn.org/api/long_polling/'
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(TelegramLogsHandler(bot, chat_id))
+        logger.info('Бот запущен')
 
-    headers = {'Authorization': devman_api_token
-               }
+        while True:
 
-    timestamp = ''
-
-    while True:
-        try:
             payload = {"timestamp": timestamp}
             response = requests.get(url,
                                     headers=headers,
@@ -52,12 +66,12 @@ if __name__ == '__main__':
                     result_text = 'К сожалению, в работе нашлись ошибки.'
                 else:
                     result_text = \
-                        'Преподавателю всё понравилось. ' \
-                        'Можно приступать к следующему уроку.'
+                            'Преподавателю всё понравилось. ' \
+                            'Можно приступать к следующему уроку.'
 
                 text = f'Преподаватель проверил Вашу работу ' \
-                       f'"{lesson_title}" ' \
-                       f'\n {lesson_url} \n {result_text}'
+                        f'"{lesson_title}" ' \
+                        f'\n {lesson_url} \n {result_text}'
 
                 timestamp = review_results['last_attempt_timestamp']
                 bot.send_message(text=text, chat_id=chat_id)
@@ -66,8 +80,16 @@ if __name__ == '__main__':
                 if review_results['request_query']:
                     timestamp = review_results['request_query'][0][1]
 
-        except requests.exceptions.ReadTimeout:
-            pass
-        except requests.exceptions.ConnectionError:
-            print('Ошибка соединения')
-            time.sleep(60)
+    except requests.exceptions.ReadTimeout:
+        pass
+    except requests.exceptions.ConnectionError:
+        print('Ошибка соединения')
+        time.sleep(60)
+    except Unauthorized:
+        logger.error('Неправильное значение токена')
+    except BadRequest:
+        logger.error('Бот не может обработать запрос')
+    except InvalidToken:
+        logger.error('Неверный токен бота')
+    except NetworkError:
+        logger.error('Проблемы с подключением')
