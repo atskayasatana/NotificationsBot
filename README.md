@@ -37,4 +37,27 @@ python main.py [chat_id]
 
 Для запуска серверной версии необходимо зайти на 81.163.28.229
 
+<pre><font color="#729FCF"><b>~</b></font>$ ssh root@81.163.28.229</pre>
+
+Репозиторий находится в папке opt:
+<pre># cd /opt/NotificationsBot
+</pre>
+
+В файле .env устанавливаются необходимые значения токенов и id_chat. 
+
+Юнит с настройками можно найти здесь:
+<pre>cd /etc/systemd/system/
+</pre>
+
+Файл NotificationBot.service
+
+Бот запускается командой 
+<pre>systemctl start NotificationBot</pre>
+
+
+
+
+
+
+
 
