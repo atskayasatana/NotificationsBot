@@ -24,13 +24,7 @@ if __name__ == '__main__':
 
     telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     devman_api_token = os.environ['DEVMAN_API_TOKEN']
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('chat_id',
-                        help='id чата в Телеграмме, '
-                             'куда будут отправляться сообщения о проверке')
-    args = parser.parse_args()
-    chat_id = args.chat_id
+    chat_id = os.environ['CHAT_ID']
 
     try:
         bot = telegram.Bot(token=telegram_bot_token)
