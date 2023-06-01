@@ -1,4 +1,3 @@
-import argparse
 import logging
 import os
 import requests
@@ -7,15 +6,18 @@ import time
 
 from dotenv import load_dotenv
 from logger import TelegramLogsHandler
-from telegram.error import BadRequest, Unauthorized, InvalidToken, NetworkError
-
+from telegram.error import BadRequest, \
+                           Unauthorized, \
+                           InvalidToken, \
+                           NetworkError, \
+                           TelegramError
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.DEBUG,
     filename='bot.log',
     filemode='w'
-)
+    )
 
 
 if __name__ == '__main__':
@@ -30,7 +32,7 @@ if __name__ == '__main__':
         bot = telegram.Bot(token=telegram_bot_token)
         url = 'https://dvmn.org/api/long_polling/'
         headers = {'Authorization': devman_api_token
-                  }
+                   }
         timestamp = ''
         logger = logging.getLogger('dvmn_bot_logger')
 
@@ -59,13 +61,12 @@ if __name__ == '__main__':
                 if lesson_returned:
                     result_text = 'К сожалению, в работе нашлись ошибки.'
                 else:
-                    result_text = \
-                            'Преподавателю всё понравилось. ' \
-                            'Можно приступать к следующему уроку.'
+                    result_text = 'Преподавателю всё понравилось.' \
+                                  'Можно приступать к следующему уроку.'
 
                 text = f'Преподаватель проверил Вашу работу ' \
-                        f'"{lesson_title}" ' \
-                        f'\n {lesson_url} \n {result_text}'
+                       f'"{lesson_title}" ' \
+                       f'\n {lesson_url} \n {result_text}'
 
                 timestamp = review_results['last_attempt_timestamp']
                 bot.send_message(text=text, chat_id=chat_id)
@@ -77,7 +78,7 @@ if __name__ == '__main__':
     except requests.exceptions.ReadTimeout:
         pass
     except requests.exceptions.ConnectionError:
-        print('Ошибка соединения')
+        logger.error('Не удается подключиться к серверу')
         time.sleep(60)
     except Unauthorized:
         logger.error('Неправильное значение токена')
@@ -87,3 +88,5 @@ if __name__ == '__main__':
         logger.error('Неверный токен бота')
     except NetworkError:
         logger.error('Проблемы с подключением')
+    except TelegramError:
+        logger.error('Бот упал (((')
