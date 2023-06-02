@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     devman_api_token = os.environ['DEVMAN_API_TOKEN']
-    chat_id = os.environ['TELEGRAM_CHAT_ID']
+    telegram_chat_id = os.environ['TELEGRAM_CHAT_ID']
 
     try:
         bot = telegram.Bot(token=telegram_bot_token)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         logger = logging.getLogger('dvmn_bot_logger')
 
         logger.setLevel(logging.DEBUG)
-        logger.addHandler(TelegramLogsHandler(bot, chat_id))
+        logger.addHandler(TelegramLogsHandler(bot, telegram_chat_id))
         logger.info('Бот запущен')
 
         while True:
@@ -79,7 +79,7 @@ if __name__ == '__main__':
                        f'\n {lesson_url} \n {result_text}'
 
                 timestamp = review_results['last_attempt_timestamp']
-                bot.send_message(text=text, chat_id=chat_id)
+                bot.send_message(text=text, chat_id=telegram_chat_id)
 
             else:
                 if review_results['request_query']:
