@@ -5,22 +5,32 @@ import telegram
 import time
 
 from dotenv import load_dotenv
-from logger import TelegramLogsHandler
 from telegram.error import BadRequest, \
                            Unauthorized, \
                            InvalidToken, \
                            NetworkError, \
                            TelegramError
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.DEBUG,
-    filename='bot.log',
-    filemode='w'
-    )
+
+class TelegramLogsHandler(logging.Handler):
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 if __name__ == '__main__':
+
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG,
+        filename='bot.log',
+        filemode='w'
+    )
 
     load_dotenv()
 
@@ -74,8 +84,6 @@ if __name__ == '__main__':
             else:
                 if review_results['request_query']:
                     timestamp = review_results['request_query'][0][1]
-
-
     except requests.exceptions.ReadTimeout:
         pass
     except requests.exceptions.ConnectionError:
