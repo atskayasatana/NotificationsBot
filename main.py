@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     devman_api_token = os.environ['DEVMAN_API_TOKEN']
-    chat_id = os.environ['CHAT_ID']
+    chat_id = os.environ['TELEGRAM_CHAT_ID']
 
     try:
         bot = telegram.Bot(token=telegram_bot_token)
