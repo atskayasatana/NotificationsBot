@@ -23,8 +23,12 @@ class TelegramLogsHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
+logger = logging.getLogger('dvmn_bot_logger')
+
+
 if __name__ == '__main__':
 
+    logger.setLevel(logging.DEBUG)
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.DEBUG,
@@ -44,9 +48,7 @@ if __name__ == '__main__':
         headers = {'Authorization': devman_api_token
                    }
         timestamp = ''
-        logger = logging.getLogger('dvmn_bot_logger')
 
-        logger.setLevel(logging.DEBUG)
         logger.addHandler(TelegramLogsHandler(bot, telegram_chat_id))
         logger.info('Бот запущен')
 
