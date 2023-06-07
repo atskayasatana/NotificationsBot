@@ -73,6 +73,15 @@ sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 Образ приложения лежит в DockerHub https://hub.docker.com/r/atskayasatana/notification_bot_deploy
 
 Загрузить его к себе можно командой docker pull
+```
+docker pull atskayasatana/notification_bot_deploy
+```
+Запустить образ можно командой
+```
+docker run notification_bot_deploy
+```
+
+
 
 
 
