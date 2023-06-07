@@ -54,6 +54,30 @@ python main.py [chat_id]
 Бот запускается командой 
 <pre>systemctl start NotificationBot</pre>
 
+## Запуск с помощью Docker 
+
+Бот упакован в docker контейнер и также может быть запущен с помощью Docker. 
+Установка Docker для Linux осуществляется с помощью команд ниже:
+
+```
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu `lsb_release -cs` test"
+sudo apt update
+sudo apt install docker-ce
+```
+Предоставим Docker права для запуска приложений
+```
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+```
+Образ приложения лежит в DockerHub https://hub.docker.com/r/atskayasatana/notification_bot_deploy
+
+Загрузить его к себе можно командой docker pull
+
+
+
+
+
 
 
 
