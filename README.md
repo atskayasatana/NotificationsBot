@@ -70,15 +70,29 @@ sudo apt install docker-ce
 ```
 sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 ```
-Образ приложения лежит в DockerHub https://hub.docker.com/r/atskayasatana/notification_bot_deploy
+Образ приложения лежит в DockerHub https://hub.docker.com/repository/docker/atskayasatana/notifications_bot/general
 
 Загрузить его к себе можно командой docker pull
 ```
-docker pull atskayasatana/notification_bot_deploy
+docker pull atskayasatana/notifications_bot
 ```
-Запустить образ можно командой
+Образ можно переименовать в любое удобное для пользователя имя:
+
 ```
-docker run notification_bot_deploy
+docker tag atskayasatana/notifications_bot <новое имя>
+```
+
+Для запуска на стороне пользователя нужен также файл с переменными окружения, где указаны следующие переменные:
+
+ ```
+TELEGRAM_BOT_TOKEN= #персональный токен для бота
+DEVMAN_API_TOKEN=#токен для платформы
+TELEGRAM_CHAT_ID=#id чата, куда будут отправляться уведомления о проверке
+```
+
+Запустить образ можно командой ниже
+```
+docker run --env-file path/to/.env <имя образа>
 ```
 
 
