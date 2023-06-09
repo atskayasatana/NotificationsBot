@@ -95,20 +95,7 @@ echo \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
-При возникновении ошибки package docker-ce has no installation candidate можно попробовать команды [отсюда](https://askubuntu.com/questions/1030179/package-docker-ce-has-no-installation-candidate-in-18-04)
 
-```
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu `lsb_release -cs` test"
-sudo apt update
-sudo apt install docker-ce
-```
-
-Или установить Docker  с помощью 
-```
-sudo snap install docker
-```
 #### Настройка Docker
 
 Информацию о постустановочной настройке Docker можно найти [здесь](https://docs.docker.com/engine/install/linux-postinstall/)
