@@ -57,7 +57,47 @@ python main.py [chat_id]
 ## Запуск с помощью Docker 
 
 Бот упакован в docker контейнер и также может быть запущен с помощью Docker. 
-Установка Docker для Linux осуществляется с помощью команд ниже:
+#### Установка Docker
+
+Подробное описание процесса установки Docker можно найти в официальной документации:
+
+https://docs.docker.com/engine/install/ubuntu/
+
+1. Создаем репозиторий:
+
+
+1.1 Обновим apt и установим приложения для работы apt через HTTPS
+
+```
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+```
+1.2 Добавляем ключи:
+
+```
+ sudo install -m 0755 -d /etc/apt/keyrings
+
+ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+ 
+```
+1.3 Настраиваем репозиторий
+
+```
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+2. Устанавливаем Docker 
+```
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+При возникновении ошибки package docker-ce has no installation candidate можно попробовать команды [отсюда](https://askubuntu.com/questions/1030179/package-docker-ce-has-no-installation-candidate-in-18-04)
 
 ```
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
@@ -66,7 +106,36 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt update
 sudo apt install docker-ce
 ```
-Предоставим Docker права для запуска приложений
+
+Или установить Docker  с помощью 
+```
+sudo snap install docker
+```
+#### Настройка Docker
+
+Информацию о постустановочной настройке Docker можно найти [здесь](https://docs.docker.com/engine/install/linux-postinstall/)
+
+Предоставим Docker права для запуска приложений:
+1. Создадим новую группу
+
+```
+sudo groupadd docker
+```
+
+2. Добавим своего пользователя в группу:
+```
+sudo usermod -aG docker $USER
+
+```
+
+Перезапустим терминал и попробуем запустить команду ниже:
+
+```
+docker run hello-world
+```
+Если ошибок нет, то мы увидим сообщение
+
+
 ```
 sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 ```
