@@ -57,23 +57,21 @@ python main.py [chat_id]
 ## Запуск с помощью Docker 
 
 Бот упакован в docker контейнер и также может быть запущен с помощью Docker. 
+
 #### Установка Docker
 
-Подробное описание процесса установки Docker можно найти в официальной документации:
+Подробное описание процесса установки Docker можно найти в [официальной документации](https://docs.docker.com/engine/install/ubuntu/):
 
-https://docs.docker.com/engine/install/ubuntu/
+1. Создаем репозиторий
 
-1. Создаем репозиторий:
-
-
-1.1 Обновим apt и установим приложения для работы apt через HTTPS
+  1.1. Обновим apt и установим приложения для работы apt через HTTPS
 
 ```
 sudo apt-get update
 sudo apt-get install ca-certificates curl gnupg
 
 ```
-1.2 Добавляем ключи:
+  1.2 Добавляем ключи:
 
 ```
  sudo install -m 0755 -d /etc/apt/keyrings
@@ -83,7 +81,7 @@ sudo apt-get install ca-certificates curl gnupg
  sudo chmod a+r /etc/apt/keyrings/docker.gpg
  
 ```
-1.3 Настраиваем репозиторий
+  1.3 Настраиваем репозиторий
 
 ```
 echo \
@@ -133,12 +131,17 @@ sudo usermod -aG docker $USER
 ```
 docker run hello-world
 ```
-Если ошибок нет, то мы увидим сообщение
+Если ошибок нет, то мы увидим сообщение:
+
+![hello](https://github.com/atskayasatana/Images/blob/3a6d178cd48851dc0221b744e71bc536f368c393/docker%20hello-world.png)
 
 
+Если появляется ошибка авторизации, то можно попробовать команду ниже:
 ```
 sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 ```
+#### Скачивание и запуск
+
 Образ приложения лежит в DockerHub https://hub.docker.com/repository/docker/atskayasatana/notifications_bot/general
 
 Загрузить его к себе можно командой docker pull
